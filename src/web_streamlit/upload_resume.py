@@ -6,7 +6,6 @@ import os
 import gspread
 from dotenv import load_dotenv
 from google.oauth2 import service_account
-from google.cloud import storage  # For Google Cloud Storage if used
 
 # Load the trained model, vectorizer, and label encoder
 script_dir = os.path.dirname(os.path.abspath(__file__))

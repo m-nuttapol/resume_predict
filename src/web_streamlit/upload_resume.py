@@ -60,31 +60,27 @@ def extract_text_from_pdf(uploaded_file):
 def extract_text_from_docx(uploaded_file):
     return docx2txt.process(uploaded_file)
 
+# Function to send data to Google Sheets
 def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
     
     try:
-        # Open the sheet, or create if not exists
+        # Check if the sheet exists, create if not
         try: 
-            sheet = client.open("Resume Dataset").sheet1
+            sheet = client.open("Resume DataSet").sheet1
         except gspread.SpreadsheetNotFound:
-            sheet = client.create("Resume Dataset").sheet1
+            sheet = client.create("Resume DataSet").sheet1
         
-        # Prepare the row to add
-        # row = [predicted_role, extracted_text]
+        row = [predicted_role, extracted_text]
         
         # Get the last row number and add data in the next row
-        # last_row = len(sheet.get_all_values()) + 1
-        
-        # Update predicted_role to column A and extracted_text to column B
-        # sheet.update(f"A{last_row}", predicted_role)
-        # sheet.update(f"B{last_row}", extracted_text)
-        sheet.update('A1', 'Test Data')
-
+        last_row = len(sheet.get_all_values()) + 1
+        sheet.update(f"A{last_row}:B{last_row}", [row])
         
         st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:
-        st.error(f"❌ Failed to send data to Google Sheets: {str(e)}") 
+        st.error(f"❌ Failed to send data to Google Sheets: {str(e)}")
+
 
 # Streamlit UI
 st.title("Resume Uploader and Job Role Predictor")

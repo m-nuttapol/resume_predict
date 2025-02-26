@@ -9,11 +9,8 @@ matplotlib
 seaborn
 joblib
 Counter
-<<<<<<< HEAD
 requests
 gspread 
 oauth2client
 dotenv
 google
-=======
->>>>>>> origin/main

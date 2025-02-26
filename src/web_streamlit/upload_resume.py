@@ -8,6 +8,8 @@ import os
 script_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "resume_model.pkl"))
 vectorizer_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "vectorizer.pkl"))
+label_encoder_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "label_encoder.pkl"))
+
 
 print("Model path:", model_path)
 print("Vectorizer path:", vectorizer_path)
@@ -16,6 +18,8 @@ print("Vectorizer path:", vectorizer_path)
 if os.path.exists(model_path) and os.path.exists(vectorizer_path):
     model = joblib.load(model_path)  # Load the trained model
     vectorizer = joblib.load(vectorizer_path)  # Load the saved vectorizer
+    label_encoder = joblib.load(label_encoder_path)  # Load the label encoder
+
     print("✅ Model and vectorizer loaded successfully.")
 else:
     raise FileNotFoundError(f"❌ Model or vectorizer file not found at {model_path} or {vectorizer_path}")
@@ -56,8 +60,11 @@ if uploaded_file is not None:
         extracted_text_vectorized = vectorizer.transform([extracted_text])
 
         # **Make Prediction**
-        predicted_role = model.predict(extracted_text_vectorized)[0]
-        
-        # **Display Prediction**
+        predicted_role_encoded = model.predict(extracted_text_vectorized)[0]
+
+        # Convert encoded prediction back to job title
+        predicted_role = label_encoder.inverse_transform([predicted_role_encoded])[0]
+
+        # Display Prediction
         st.subheader("Predicted Job Role:")
         st.write(f"📌 **{predicted_role}**")

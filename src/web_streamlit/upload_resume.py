@@ -85,16 +85,6 @@ def send_to_google_sheet(extracted_text, predicted_role):
 # Streamlit UI
 st.title("Resume Uploader and Job Role Predictor")
 
-# Clear specific outputs
-if st.button("Reset Outputs"):
-    st.session_state.uploaded_file = None
-    st.session_state.extracted_text = None
-    st.session_state.predicted_role = None
-    st.session_state.clear()
-    
-    st.empty()
-    st.success("All outputs have been cleared!")
-
 
 uploaded_file = st.file_uploader("Upload a Resume (PDF or DOCX)", type=["pdf", "docx"])
 
@@ -128,29 +118,53 @@ if uploaded_file is not None:
         st.subheader("Predicted Job Role:")
         st.write(f"📌 **{predicted_role}**")
 
+
+        # Radio button to ask user if they want to submit the data
         consent = st.radio(
             "Would you like to help us support enhancing the prediction by providing this data?",
             ["Yes, I would like to help!", "Yes, but I would prefer to provide my own answer", "No, thank you"]
         )
 
+        # Initialize a flag for submission
+        submit_flag = False
+        next_page = None  # Variable to control navigation to the next page
 
         if consent == "Yes, I would like to help!":
-            # If the user wants to submit the predicted role
-            if st.button("Submit to Google Sheet"):
-                send_to_google_sheet(extracted_text, predicted_role)
-                st.success("You chose to submit the data. Thank you!")
-
-
-        
+            submit_flag = st.button("Submit to Google Sheet")
 
         elif consent == "Yes, but I would prefer to provide my own answer":
-            # If the user wants to manually specify the role
             manual_role = st.text_input("Please specify the role you think is most relevant:")
             if manual_role:
-                if st.button("Submit Manual Role to Google Sheet"):
-                    send_to_google_sheet(extracted_text, manual_role)
-                    st.success("You chose to submit the data. Thank you!")
+                submit_flag = st.button("Submit Manual Role to Google Sheet")
 
         elif consent == "No, thank you":
-            # If the user chooses not to help
-            st.success("You chose not to submit the data. Thank you!")
+            submit_flag = st.button("Submit No Data")
+
+        # Once user has chosen and clicked submit, proceed with the form submission
+        if submit_flag:
+            if consent == "Yes, I would like to help!":
+                # Simulate submitting data
+                send_to_google_sheet(extracted_text, predicted_role)
+                st.success("✅ You chose to submit the predicted role. Thank you!")
+                next_page = "next_page_1"  # Set the flag to navigate to the next page
+
+            elif consent == "Yes, but I would prefer to provide my own answer":
+                # Simulate submitting data
+                send_to_google_sheet(extracted_text, manual_role)
+                st.success("✅ Your manual role has been submitted. Thank you!")
+                next_page = "next_page_1"  # Set the flag to navigate to the next page
+
+            elif consent == "No, thank you":
+                st.success("✅ You chose not to submit the data. Thank you!")
+                next_page = "next_page_2"  # Set the flag to navigate to the "Thank You" page
+
+        # Simulate navigation: Display different content based on the 'next_page' flag
+        if next_page == "next_page_1":
+            st.write("You are now on the next page: Data successfully submitted!")
+            # You can add more content here specific to this page (e.g., a thank-you message or other data)
+
+        elif next_page == "next_page_2":
+            st.write("Thank you for your response! You have chosen not to submit the data.")
+            # You can add more content here specific to this page (e.g., a message or links)
+
+

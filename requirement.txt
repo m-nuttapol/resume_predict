@@ -3,6 +3,6 @@ streamlit
 pandas
 scikit-learn
 streamlit
-pdfplumber
+pdfplumber==0.9.0
 docx2txt
 pickle5 

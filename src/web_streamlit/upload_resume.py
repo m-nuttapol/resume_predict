@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from google.oauth2 import service_account
 
 # Load environment variables from .env file (ensure .env is present in your project)
-load_dotenv()
+# load_dotenv()
 
 # Get credentials from environment variable (the path to the credentials file)
 credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")

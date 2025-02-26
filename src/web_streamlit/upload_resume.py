@@ -3,7 +3,6 @@ import pdfplumber
 import docx2txt
 import joblib  # Use joblib instead of pickle
 import os
-import label_encoder
 
 # Load the trained model and vectorizer
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,6 +18,8 @@ print("Vectorizer path:", vectorizer_path)
 if os.path.exists(model_path) and os.path.exists(vectorizer_path):
     model = joblib.load(model_path)  # Load the trained model
     vectorizer = joblib.load(vectorizer_path)  # Load the saved vectorizer
+    label_encoder = joblib.load(label_encoder_path)  # Load the label encoder
+
     print("✅ Model and vectorizer loaded successfully.")
 else:
     raise FileNotFoundError(f"❌ Model or vectorizer file not found at {model_path} or {vectorizer_path}")

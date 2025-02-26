@@ -9,4 +9,3 @@ matplotlib
 seaborn
 joblib
 Counter
-label_encoder

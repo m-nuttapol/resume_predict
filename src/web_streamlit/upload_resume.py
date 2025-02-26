@@ -75,7 +75,8 @@ def send_to_google_sheet(extracted_text, predicted_role):
         
         # Attempt to append the data
         st.write("Appending data to the sheet...")
-        sheet.append_row([predicted_role, extracted_text])
+        response = sheet.append_row([predicted_role, extracted_text])
+        st.write(f"API Response: {response}")
         
         st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:

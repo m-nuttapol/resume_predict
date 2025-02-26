@@ -48,7 +48,7 @@ if os.path.exists(model_path) and os.path.exists(vectorizer_path) and os.path.ex
 else:
     raise FileNotFoundError(f"❌ Model, vectorizer, or label encoder file not found.")
 
-## Function to extract text from a PDF
+# Function to extract text from a PDF
 def extract_text_from_pdf(uploaded_file):
     text = ""
     with pdfplumber.open(uploaded_file) as pdf:
@@ -63,6 +63,7 @@ def extract_text_from_docx(uploaded_file):
 # Function to send data to Google Sheets
 def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
+    
     try:
         # Check if the sheet exists, create if not
         try: 
@@ -80,10 +81,11 @@ def send_to_google_sheet(extracted_text, predicted_role):
     except Exception as e:
         st.error(f"❌ Failed to send data to Google Sheets: {str(e)}")
 
-# Function for Page 1 (Resume Uploader and Job Role Prediction)
-def page_1():
+def page1():
+# Streamlit UI
     st.title("Resume Uploader and Job Role Predictor")
-    
+
+
     uploaded_file = st.file_uploader("Upload a Resume (PDF or DOCX)", type=["pdf", "docx"])
 
     if uploaded_file is not None:
@@ -105,12 +107,17 @@ def page_1():
             st.subheader("Extracted Text:")
             st.text_area("", extracted_text, height=300)
 
-            # Simulate prediction (you can integrate your actual prediction model here)
-            predicted_role = "Software Engineer"  # Dummy predicted role for now
+            extracted_text_vectorized = vectorizer.transform([extracted_text])
+
+            predicted_role_encoded = model.predict(extracted_text_vectorized)[0]
+
+            predicted_role = label_encoder.inverse_transform([predicted_role_encoded])[0]
+
             st.session_state.predicted_role = predicted_role
 
             st.subheader("Predicted Job Role:")
             st.write(f"📌 **{predicted_role}**")
+
 
             # Radio button to ask user if they want to submit the data
             consent = st.radio(
@@ -118,6 +125,7 @@ def page_1():
                 ["Yes, I would like to help!", "Yes, but I would prefer to provide my own answer", "No, thank you"]
             )
 
+            # Initialize a flag for submission
             submit_flag = False
             next_page = None  # Variable to control navigation to the next page
 
@@ -135,11 +143,13 @@ def page_1():
             # Once user has chosen and clicked submit, proceed with the form submission
             if submit_flag:
                 if consent == "Yes, I would like to help!":
+                    # Simulate submitting data
                     send_to_google_sheet(extracted_text, predicted_role)
                     st.success("✅ You chose to submit the predicted role. Thank you!")
                     next_page = "next_page_1"  # Set the flag to navigate to the next page
 
                 elif consent == "Yes, but I would prefer to provide my own answer":
+                    # Simulate submitting data
                     send_to_google_sheet(extracted_text, manual_role)
                     st.success("✅ Your manual role has been submitted. Thank you!")
                     next_page = "next_page_1"  # Set the flag to navigate to the next page
@@ -151,12 +161,13 @@ def page_1():
             # Simulate navigation: Display different content based on the 'next_page' flag
             if next_page == "next_page_1":
                 st.write("You are now on the next page: Data successfully submitted!")
-                return "thank_you_page"
+                # You can add more content here specific to this page (e.g., a thank-you message or other data)
 
             elif next_page == "next_page_2":
-                return "thank_you_page"
+                st.write("Thank you for your response! You have chosen not to submit the data.")
+                # You can add more content here specific to this page (e.g., a message or links)
 
-# Function for Page 2 (Thank You Page)
+
 def thank_you_page():
     st.title("Thank You :D")
     st.write("Thank you for your input! Your response has been received.")
@@ -165,6 +176,6 @@ def thank_you_page():
 page = st.selectbox("Select a Page", ["Resume Uploader", "Thank You Page"])
 
 if page == "Resume Uploader":
-    result = page_1()  # Show the Resume Uploader page
+    result = page1()  # Show the Resume Uploader page
 elif page == "Thank You Page":
-    thank_you_page()  # Show the Thank You page
+    thank_you_page()  # S

@@ -8,6 +8,7 @@ from google.oauth2 import service_account
 import json
 
 # Load Google credentials from Streamlit secrets
+# Load the Google credentials from Streamlit secrets
 google_credentials = st.secrets["GOOGLE_CREDENTIALS"]
 
 # The private key in TOML format will need to be treated as a string
@@ -25,8 +26,14 @@ google_credentials_dict = {
     "universe_domain": google_credentials["universe_domain"]
 }
 
-# Authenticate with Google using service account info
-credentials = service_account.Credentials.from_service_account_info(google_credentials_dict)
+# Define the required scopes
+scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+
+# Authenticate with Google using service account info and correct scopes
+credentials = service_account.Credentials.from_service_account_info(
+    google_credentials_dict, scopes=scopes
+)
+
 
 # Verify the authentication
 st.write("Successfully authenticated with Google!")

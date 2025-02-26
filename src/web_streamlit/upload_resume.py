@@ -32,7 +32,7 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 
 # Verify the authentication
-st.write("Successfully authenticated with Google!")
+# st.write("Successfully authenticated with Google!")
 
 # Load the trained model, vectorizer, and label encoder
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +44,7 @@ if os.path.exists(model_path) and os.path.exists(vectorizer_path) and os.path.ex
     model = joblib.load(model_path)  # Load the trained model
     vectorizer = joblib.load(vectorizer_path)  # Load the saved vectorizer
     label_encoder = joblib.load(label_encoder_path)  # Load the label encoder
-    st.write("✅ Model, vectorizer, and label encoder loaded successfully.")
+    # st.write("✅ Model, vectorizer, and label encoder loaded successfully.")
 else:
     raise FileNotFoundError(f"❌ Model, vectorizer, or label encoder file not found.")
 

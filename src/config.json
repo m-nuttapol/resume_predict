@@ -1,0 +1,193 @@
+{
+  "role": {
+    "Software Development": {
+      "Full Stack Development": {
+        "positions": ["Full Stack Developer"],
+        "skills": ["JavaScript", "React", "Node.js", "MongoDB", "Express.js", "API Development", "Docker", "Git"],
+        "keywords": [
+          "Full Stack",
+          "Building scalable applications",
+          "Frontend and backend integration",
+          "RESTful API design and implementation",
+          "Experience in MERN stack"
+        ]
+      },
+      "Backend Development": {
+        "positions": ["Backend Developer", "Java Developer", "Python Developer", "DotNet Developer"],
+        "skills": ["Java", "Python", "C#", ".NET", "Spring Boot", "Django", "RESTful APIs", "Microservices", "SQL", "NoSQL"],
+        "keywords": [
+          "Backend",
+          "Building secure and scalable backend services",
+          "Database management and optimization",
+          "Microservices architecture",
+          "REST API development and authentication"
+        ]
+      },
+      "Frontend Development": {
+        "positions": ["Frontend Developer", "Web Designing"],
+        "skills": ["HTML", "CSS", "JavaScript", "React", "Vue.js", "Angular", "UI/UX Design", "Figma", "Adobe XD"],
+        "keywords": [
+          "Frontend",
+          "User-friendly and responsive web design",
+          "Experience in modern JavaScript frameworks",
+          "UI/UX design principles",
+          "Building reusable frontend components"
+        ]
+      },
+      "Mobile Development": {
+        "positions": ["Mobile App Developer (iOS/Android)"],
+        "skills": ["Swift", "Kotlin", "Flutter", "React Native", "iOS Development", "Android Development", "Mobile UI/UX"],
+        "keywords": [
+          "Mobile",
+          "Mobile app development for iOS and Android",
+          "Building cross-platform mobile applications",
+          "Optimizing app performance and user experience"
+        ]
+      }
+    },
+    "Data and AI": {
+      "Data Science": {
+        "positions": ["Data Scientist", "Machine Learning Engineer", "Data Science"],
+        "skills": ["Python", "R", "SQL", "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch", "Data Visualization", "Statistics"],
+        "keywords": [
+          "Data Science",
+          "Building predictive models",
+          "Data-driven decision making",
+          "Statistical analysis and machine learning",
+          "Experience with TensorFlow and PyTorch"
+        ]
+      },
+      "Data Engineering": {
+        "positions": ["Database", "ETL Developer", "Hadoop"],
+        "skills": ["SQL", "PostgreSQL", "MongoDB", "ETL Pipelines", "Big Data", "Apache Spark", "Hadoop", "Data Warehousing"],
+        "keywords": [
+          "Data Engineer",
+          "Building scalable ETL pipelines",
+          "Big data processing and warehousing",
+          "Optimizing data workflows",
+          "Experience in Apache Spark and Hadoop"
+        ]
+      }
+    },
+    "Cloud and DevOps": {
+      "Cloud Engineering": {
+        "positions": ["Cloud Engineer"],
+        "skills": ["AWS", "Azure", "Google Cloud", "Kubernetes", "Terraform", "Cloud Security", "Networking"],
+        "keywords": [
+          "Cloud Engineer",
+          "Cloud infrastructure design and deployment",
+          "Experience in AWS, Azure, or Google Cloud",
+          "Implementing infrastructure as code"
+        ]
+      },
+      "DevOps": {
+        "positions": ["DevOps Engineer"],
+        "skills": ["CI/CD", "Docker", "Jenkins", "Kubernetes", "Ansible", "Terraform", "Monitoring & Logging"],
+        "keywords": [
+          "DevOps Engineer",
+          "Continuous integration and deployment",
+          "Automating infrastructure management",
+          "Experience with Kubernetes and Docker"
+        ]
+      },
+      "Network Security": {
+        "positions": ["Network Security Engineer"],
+        "skills": ["Cybersecurity", "Firewalls", "Intrusion Detection", "Networking Protocols", "Encryption"],
+        "keywords": [
+          "Security",
+          "Cybersecurity and risk management",
+          "Network security architecture",
+          "Intrusion detection and prevention"
+        ]
+      }
+    },
+    "Quality Assurance": {
+      "Software Testing": {
+        "positions": ["Automation Testing", "Testing"],
+        "skills": ["Selenium", "JUnit", "Test Automation", "Bug Tracking", "Performance Testing"],
+        "keywords": [
+          "Testing",
+          "Software testing and bug tracking",
+          "Experience in automated test frameworks",
+          "Ensuring application reliability and stability"
+        ]
+      }
+    },
+    "Business and Management": {
+      "Business Analysis": {
+        "positions": ["Business Analyst"],
+        "skills": ["Market Research", "Data Analysis", "Business Strategy", "SQL", "Microsoft Excel"],
+        "keywords": [
+          "Business",
+          "Conducting market research",
+          "Data-driven business decisions",
+          "Experience in strategic planning"
+        ]
+      }
+    },
+    "Infrastructure and Engineering": {
+      "Civil Engineering": {
+        "positions": ["Civil Engineer"],
+        "skills": ["Structural Engineering", "AutoCAD", "Project Management"],
+        "keywords": [
+          "Civil",
+          "Experience in structural engineering",
+          "Civil construction and project planning",
+          "Proficiency in AutoCAD"
+        ]
+      },
+      "Electrical Engineering": {
+        "positions": ["Electrical Engineering"],
+        "skills": ["Circuit Design", "MATLAB", "Power Systems"],
+        "keywords": [
+          "Electrical",
+          "Designing and testing electrical circuits",
+          "Experience in power systems and electronics",
+          "Expertise in circuit simulation and MATLAB"
+        ]
+      },
+      "Mechanical Engineering": {
+        "positions": ["Mechanical Engineer"],
+        "skills": ["SolidWorks", "Thermodynamics", "Manufacturing Processes"],
+        "keywords": [
+          "Mechanical",
+          "Product design and development",
+          "Mechanical simulations and prototyping",
+          "Experience in SolidWorks and thermodynamics"
+        ]
+      }
+    },
+    "Blockchain and Security": {
+      "Blockchain Technology": {
+        "positions": ["Blockchain Developer"],
+        "skills": ["Smart Contracts", "Ethereum", "Hyperledger", "Cryptography"],
+        "keywords": [
+          "Blockchain",
+          "Blockchain application development",
+          "Experience with Ethereum and smart contracts",
+          "Secure and decentralized systems"
+        ]
+      }
+    },
+    "Human Resources and Legal": {
+      "HR": {
+        "positions": ["HR"],
+        "skills": ["Talent Acquisition", "HR Software", "Employee Relations"],
+        "keywords": [
+          "Recruitment and talent acquisition",
+          "Workplace policies and HR management",
+          "Building strong organizational culture"
+        ]
+      },
+      "Legal": {
+        "positions": ["Advocate"],
+        "skills": ["Legal Research", "Contract Drafting", "Litigation"],
+        "keywords": [
+          "Expertise in corporate law",
+          "Experience in contract negotiation",
+          "Regulatory compliance and legal analysis"
+        ]
+      }
+    }
+  }
+}

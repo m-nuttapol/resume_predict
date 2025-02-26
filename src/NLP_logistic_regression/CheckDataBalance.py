@@ -7,7 +7,7 @@ class DataBalance:
         Initializes the DataBalance class with a DataFrame containing job categories.
         """
         self.df = df
-        self.category_counts = df['Category'].value_counts()  
+        self.category_counts = df['map_roles'].value_counts()  
         self.total_samples = len(df)
 
     def plot_distribution(self):

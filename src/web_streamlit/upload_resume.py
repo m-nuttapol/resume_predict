@@ -127,18 +127,17 @@ def page1():
 
             # Initialize a flag for submission
             submit_flag = False
-            next_page = None  # Variable to control navigation to the next page
 
             if consent == "Yes, I would like to help!":
-                submit_flag = st.button("Submit to Google Sheet")
+                submit_flag = st.button("Submit")
 
             elif consent == "Yes, but I would prefer to provide my own answer":
                 manual_role = st.text_input("Please specify the role you think is most relevant:")
                 if manual_role:
-                    submit_flag = st.button("Submit Manual Role to Google Sheet")
+                    submit_flag = st.button("Submit")
 
             elif consent == "No, thank you":
-                submit_flag = st.button("Submit No Data")
+                submit_flag = st.button("Submit")
 
             # Once user has chosen and clicked submit, proceed with the form submission
             if submit_flag:
@@ -146,26 +145,18 @@ def page1():
                     # Simulate submitting data
                     send_to_google_sheet(extracted_text, predicted_role)
                     st.success("✅ You chose to submit the predicted role. Thank you!")
-                    next_page = "next_page_1"  # Set the flag to navigate to the next page
+                    thank_you_page()
 
                 elif consent == "Yes, but I would prefer to provide my own answer":
                     # Simulate submitting data
                     send_to_google_sheet(extracted_text, manual_role)
                     st.success("✅ Your manual role has been submitted. Thank you!")
-                    next_page = "next_page_1"  # Set the flag to navigate to the next page
-
+                    thank_you_page()
                 elif consent == "No, thank you":
-                    st.success("✅ You chose not to submit the data. Thank you!")
-                    next_page = "next_page_2"  # Set the flag to navigate to the "Thank You" page
+                    st.success("✅ You chose not to submit the data.")
+                    thank_you_page() 
 
-            # Simulate navigation: Display different content based on the 'next_page' flag
-            if next_page == "next_page_1":
-                st.write("You are now on the next page: Data successfully submitted!")
-                # You can add more content here specific to this page (e.g., a thank-you message or other data)
 
-            elif next_page == "next_page_2":
-                st.write("Thank you for your response! You have chosen not to submit the data.")
-                # You can add more content here specific to this page (e.g., a message or links)
 
 
 def thank_you_page():
@@ -173,9 +164,9 @@ def thank_you_page():
     st.write("Thank you for your input! Your response has been received.")
 
 # Main app logic for page navigation
-page = st.selectbox("Select a Page", ["Resume Uploader", "Thank You Page"])
+# page = st.selectbox("Select a Page", ["Resume Uploader", "Thank You Page"])
 
-if page == "Resume Uploader":
-    result = page1()  # Show the Resume Uploader page
-elif page == "Thank You Page":
-    thank_you_page()  # S
+# if page == "Resume Uploader":
+#     result = page1()  # Show the Resume Uploader page
+# elif page == "Thank You Page":
+#     thank_you_page()  # S

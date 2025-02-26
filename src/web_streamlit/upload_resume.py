@@ -85,9 +85,14 @@ def send_to_google_sheet(extracted_text, predicted_role):
 # Streamlit UI
 st.title("Resume Uploader and Job Role Predictor")
 
-# Refresh button logic to clear outputs
-if st.button("Clear Outputs"):
-    st.session_state.clear()
+# Clear specific outputs
+if st.button("Reset Outputs"):
+    st.session_state.uploaded_file = None
+    st.session_state.extracted_text = None
+    st.session_state.predicted_role = None
+    st.session_state.clear()  # Clear any other session data you don’t need
+    st.success("All outputs have been cleared!")
+
 
 uploaded_file = st.file_uploader("Upload a Resume (PDF or DOCX)", type=["pdf", "docx"])
 

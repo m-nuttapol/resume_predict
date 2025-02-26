@@ -48,7 +48,7 @@ if os.path.exists(model_path) and os.path.exists(vectorizer_path) and os.path.ex
 else:
     raise FileNotFoundError(f"❌ Model, vectorizer, or label encoder file not found.")
 
-# Function to extract text from a PDF
+## Function to extract text from a PDF
 def extract_text_from_pdf(uploaded_file):
     text = ""
     with pdfplumber.open(uploaded_file) as pdf:
@@ -63,7 +63,6 @@ def extract_text_from_docx(uploaded_file):
 # Function to send data to Google Sheets
 def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
-    
     try:
         # Check if the sheet exists, create if not
         try: 
@@ -81,90 +80,91 @@ def send_to_google_sheet(extracted_text, predicted_role):
     except Exception as e:
         st.error(f"❌ Failed to send data to Google Sheets: {str(e)}")
 
-
-# Streamlit UI
-st.title("Resume Uploader and Job Role Predictor")
-
-
-uploaded_file = st.file_uploader("Upload a Resume (PDF or DOCX)", type=["pdf", "docx"])
-
-if uploaded_file is not None:
-    st.session_state.uploaded_file = uploaded_file
-
-    file_extension = uploaded_file.name.split(".")[-1].lower()
+# Function for Page 1 (Resume Uploader and Job Role Prediction)
+def page_1():
+    st.title("Resume Uploader and Job Role Predictor")
     
-    if file_extension == "pdf":
-        extracted_text = extract_text_from_pdf(uploaded_file)
-    elif file_extension == "docx":
-        extracted_text = extract_text_from_docx(uploaded_file)
-    else:
-        st.error("Unsupported file format. Please upload a PDF or DOCX file.")
-        extracted_text = ""
+    uploaded_file = st.file_uploader("Upload a Resume (PDF or DOCX)", type=["pdf", "docx"])
 
-    st.session_state.extracted_text = extracted_text
+    if uploaded_file is not None:
+        st.session_state.uploaded_file = uploaded_file
 
-    if extracted_text:
-        st.subheader("Extracted Text:")
-        st.text_area("", extracted_text, height=300)
+        file_extension = uploaded_file.name.split(".")[-1].lower()
+        
+        if file_extension == "pdf":
+            extracted_text = extract_text_from_pdf(uploaded_file)
+        elif file_extension == "docx":
+            extracted_text = extract_text_from_docx(uploaded_file)
+        else:
+            st.error("Unsupported file format. Please upload a PDF or DOCX file.")
+            extracted_text = ""
 
-        extracted_text_vectorized = vectorizer.transform([extracted_text])
+        st.session_state.extracted_text = extracted_text
 
-        predicted_role_encoded = model.predict(extracted_text_vectorized)[0]
+        if extracted_text:
+            st.subheader("Extracted Text:")
+            st.text_area("", extracted_text, height=300)
 
-        predicted_role = label_encoder.inverse_transform([predicted_role_encoded])[0]
+            # Simulate prediction (you can integrate your actual prediction model here)
+            predicted_role = "Software Engineer"  # Dummy predicted role for now
+            st.session_state.predicted_role = predicted_role
 
-        st.session_state.predicted_role = predicted_role
+            st.subheader("Predicted Job Role:")
+            st.write(f"📌 **{predicted_role}**")
 
-        st.subheader("Predicted Job Role:")
-        st.write(f"📌 **{predicted_role}**")
+            # Radio button to ask user if they want to submit the data
+            consent = st.radio(
+                "Would you like to help us support enhancing the prediction by providing this data?",
+                ["Yes, I would like to help!", "Yes, but I would prefer to provide my own answer", "No, thank you"]
+            )
 
+            submit_flag = False
+            next_page = None  # Variable to control navigation to the next page
 
-        # Radio button to ask user if they want to submit the data
-        consent = st.radio(
-            "Would you like to help us support enhancing the prediction by providing this data?",
-            ["Yes, I would like to help!", "Yes, but I would prefer to provide my own answer", "No, thank you"]
-        )
-
-        # Initialize a flag for submission
-        submit_flag = False
-        next_page = None  # Variable to control navigation to the next page
-
-        if consent == "Yes, I would like to help!":
-            submit_flag = st.button("Submit to Google Sheet")
-
-        elif consent == "Yes, but I would prefer to provide my own answer":
-            manual_role = st.text_input("Please specify the role you think is most relevant:")
-            if manual_role:
-                submit_flag = st.button("Submit Manual Role to Google Sheet")
-
-        elif consent == "No, thank you":
-            submit_flag = st.button("Submit No Data")
-
-        # Once user has chosen and clicked submit, proceed with the form submission
-        if submit_flag:
             if consent == "Yes, I would like to help!":
-                # Simulate submitting data
-                send_to_google_sheet(extracted_text, predicted_role)
-                st.success("✅ You chose to submit the predicted role. Thank you!")
-                next_page = "next_page_1"  # Set the flag to navigate to the next page
+                submit_flag = st.button("Submit to Google Sheet")
 
             elif consent == "Yes, but I would prefer to provide my own answer":
-                # Simulate submitting data
-                send_to_google_sheet(extracted_text, manual_role)
-                st.success("✅ Your manual role has been submitted. Thank you!")
-                next_page = "next_page_1"  # Set the flag to navigate to the next page
+                manual_role = st.text_input("Please specify the role you think is most relevant:")
+                if manual_role:
+                    submit_flag = st.button("Submit Manual Role to Google Sheet")
 
             elif consent == "No, thank you":
-                st.success("✅ You chose not to submit the data. Thank you!")
-                next_page = "next_page_2"  # Set the flag to navigate to the "Thank You" page
+                submit_flag = st.button("Submit No Data")
 
-        # Simulate navigation: Display different content based on the 'next_page' flag
-        if next_page == "next_page_1":
-            st.write("You are now on the next page: Data successfully submitted!")
-            # You can add more content here specific to this page (e.g., a thank-you message or other data)
+            # Once user has chosen and clicked submit, proceed with the form submission
+            if submit_flag:
+                if consent == "Yes, I would like to help!":
+                    send_to_google_sheet(extracted_text, predicted_role)
+                    st.success("✅ You chose to submit the predicted role. Thank you!")
+                    next_page = "next_page_1"  # Set the flag to navigate to the next page
 
-        elif next_page == "next_page_2":
-            st.write("Thank you for your response! You have chosen not to submit the data.")
-            # You can add more content here specific to this page (e.g., a message or links)
+                elif consent == "Yes, but I would prefer to provide my own answer":
+                    send_to_google_sheet(extracted_text, manual_role)
+                    st.success("✅ Your manual role has been submitted. Thank you!")
+                    next_page = "next_page_1"  # Set the flag to navigate to the next page
 
+                elif consent == "No, thank you":
+                    st.success("✅ You chose not to submit the data. Thank you!")
+                    next_page = "next_page_2"  # Set the flag to navigate to the "Thank You" page
 
+            # Simulate navigation: Display different content based on the 'next_page' flag
+            if next_page == "next_page_1":
+                st.write("You are now on the next page: Data successfully submitted!")
+                return "thank_you_page"
+
+            elif next_page == "next_page_2":
+                return "thank_you_page"
+
+# Function for Page 2 (Thank You Page)
+def thank_you_page():
+    st.title("Thank You :D")
+    st.write("Thank you for your input! Your response has been received.")
+
+# Main app logic for page navigation
+page = st.selectbox("Select a Page", ["Resume Uploader", "Thank You Page"])
+
+if page == "Resume Uploader":
+    result = page_1()  # Show the Resume Uploader page
+elif page == "Thank You Page":
+    thank_you_page()  # Show the Thank You page

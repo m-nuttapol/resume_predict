@@ -25,7 +25,10 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "../../src/clean_dataset/cleaned_dataset.csv")
     
+<<<<<<< HEAD
     
+=======
+>>>>>>> origin/main
 
     # Step 1. Load csv that clean data convert to DF
     df = load_csv(file_path)

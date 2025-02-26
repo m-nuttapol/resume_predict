@@ -156,6 +156,7 @@ def page1():
                     st.success("✅ You chose not to submit the data.")
                     st.session_state.current_page = "thank_you_page"
 
+                st.experimental_rerun()
 
 
 def thank_you_page():

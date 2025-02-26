@@ -121,14 +121,30 @@ if uploaded_file is not None:
         st.subheader("Predicted Job Role:")
         st.write(f"📌 **{predicted_role}**")
 
-        consent = st.radio("Do you want to submit the predicted role to the Google Sheet?", ["Yes", "No"])
+        consent = st.radio(
+            "Would you like to help us support enhancing the prediction by providing this data?",
+            ["Yes, I would like to help!", "Yes, but I would prefer to provide my own answer", "No, thank you"]
+        )
 
-        if consent == "Yes":
+
+        if consent == "Yes, I would like to help!":
+            # If the user wants to submit the predicted role
             if st.button("Submit to Google Sheet"):
                 send_to_google_sheet(extracted_text, predicted_role)
 
-        elif consent == "No":
+            st.success("You chose to submit the data. Thank you!")
+        
+
+        elif consent == "Yes, but I would prefer to provide my own answer":
+            # If the user wants to manually specify the role
             manual_role = st.text_input("Please specify the role you think is most relevant:")
             if manual_role:
                 if st.button("Submit Manual Role to Google Sheet"):
                     send_to_google_sheet(extracted_text, manual_role)
+            
+            st.success("You chose to submit the data. Thank you!")
+
+
+        elif consent == "No, thank you":
+            # If the user chooses not to help
+            st.success("You chose not to submit the data. Thank you!")

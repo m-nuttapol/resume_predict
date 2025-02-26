@@ -64,19 +64,13 @@ def extract_text_from_docx(uploaded_file):
 def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
     
-    # Debugging logs
-    st.write("Attempting to send data to Google Sheets...")
-    
     try:
-        st.write("Opening the sheet...")
-
-        # Open the sheet
         sheet = client.open("DataSetStore").sheet1
+        row = [predicted_role, extracted_text]
         
-        # Attempt to append the data
-        st.write("Appending data to the sheet...")
-        response = sheet.append_row([predicted_role, extracted_text])
-        st.write(f"API Response: {response}")
+        # Get the last row number and add data in the next row
+        last_row = len(sheet.get_all_values()) + 1
+        sheet.update(f"A{last_row}:B{last_row}", [row])
         
         st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:

@@ -1,4 +1,5 @@
 # pip install -r .\requirement.txt
+streamlit
 pandas
 scikit-learn
 streamlit

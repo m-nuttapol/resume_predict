@@ -1,17 +1,25 @@
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from imblearn.over_sampling import SMOTE
-
+import os
+import joblib
 class DataDivide:
-    def __init__(self, df):
+    def __init__(self, df,script_dir,label_encoder_name="label_encoder.pkl"):
         """Initialize the class with the DataFrame."""
         self.df = df
         self.le = LabelEncoder()
+
+        self.model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", label_encoder_name))
+
 
     def encode_categories(self):
         """Encode job categories into numerical values."""
         #transfrom to encode and 
         self.df['roles_encoded'] = self.le.fit_transform(self.df['map_roles'])
+
+        # Save the LabelEncoder
+        joblib.dump(self.le, self.model_path)
+
+        print(f"✅ Label encoder saved at {self.model_path}")
         
         return self.df
 

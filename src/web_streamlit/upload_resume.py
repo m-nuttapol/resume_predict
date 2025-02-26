@@ -5,31 +5,30 @@ import joblib
 import os
 import gspread
 from google.oauth2 import service_account
-import toml
 
-config = toml.load('config.toml')
+# Load the Google credentials from Streamlit secrets
+google_credentials = st.secrets["GOOGLE_CREDENTIALS"]
 
-# Load environment variables from .env file (ensure .env is present in your project)
-google_credentials = config['GOOGLE_CREDENTIALS']
-
-# Create a dictionary for credentials
-credentials_dict = {
-    "type": google_credentials['type'],
-    "project_id": google_credentials['project_id'],
-    "private_key_id": google_credentials['private_key_id'],
-    "private_key": google_credentials['private_key'],
-    "client_email": google_credentials['client_email'],
-    "client_id": google_credentials['client_id'],
-    "auth_uri": google_credentials['auth_uri'],
-    "token_uri": google_credentials['token_uri'],
-    "auth_provider_x509_cert_url": google_credentials['auth_provider_x509_cert_url'],
-    "client_x509_cert_url": google_credentials['client_x509_cert_url'],
-    "universe_domain": google_credentials['universe_domain']
+# The private key in TOML format will need to be treated as a string
+google_credentials_dict = {
+    "type": google_credentials["type"],
+    "project_id": google_credentials["project_id"],
+    "private_key_id": google_credentials["private_key_id"],
+    "private_key": google_credentials["private_key"],  # Already formatted as a string
+    "client_email": google_credentials["client_email"],
+    "client_id": google_credentials["client_id"],
+    "auth_uri": google_credentials["auth_uri"],
+    "token_uri": google_credentials["token_uri"],
+    "auth_provider_x509_cert_url": google_credentials["auth_provider_x509_cert_url"],
+    "client_x509_cert_url": google_credentials["client_x509_cert_url"],
+    "universe_domain": google_credentials["universe_domain"]
 }
 
-
 # Authenticate with Google using service account info
-credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+credentials = service_account.Credentials.from_service_account_info(google_credentials_dict)
+
+# Verify the authentication
+st.write("Successfully authenticated with Google!")
 
 # Load the trained model, vectorizer, and label encoder
 script_dir = os.path.dirname(os.path.abspath(__file__))

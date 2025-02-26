@@ -64,9 +64,19 @@ def extract_text_from_docx(uploaded_file):
 def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
     
+    # Debugging logs
+    st.write("Attempting to send data to Google Sheets...")
+    
     try:
+        st.write("Opening the sheet...")
+
+        # Open the sheet
         sheet = client.open("DataSetStore").sheet1
+        
+        # Attempt to append the data
+        st.write("Appending data to the sheet...")
         sheet.append_row([predicted_role, extracted_text])
+        
         st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:
         st.error(f"❌ Failed to send data to Google Sheets: {str(e)}")

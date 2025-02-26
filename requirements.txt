@@ -9,3 +9,6 @@ matplotlib
 seaborn
 joblib
 Counter
+requests
+gspread 
+oauth2client

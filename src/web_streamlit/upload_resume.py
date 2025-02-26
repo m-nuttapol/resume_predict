@@ -4,15 +4,29 @@ import docx2txt
 import joblib
 import os
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from dotenv import load_dotenv
+from google.oauth2 import service_account
+from google.cloud import storage  # For Google Cloud Storage if used
 
 # Load the trained model, vectorizer, and label encoder
 script_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "resume_model.pkl"))
 vectorizer_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "vectorizer.pkl"))
 label_encoder_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "label_encoder.pkl"))
-credentials_api = os.path.abspath(os.path.join(script_dir, "../../src/credentials", "resume-api-dataset-5080b98d19aa.json"))
 
+# Load environment variables from .env file (ensure .env is present in your project)
+load_dotenv()
+
+# Get credentials from environment variable (the path to the credentials file)
+credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+if credentials_path is None:
+    raise ValueError("Google credentials environment variable is not set")
+
+# Load credentials from the service account JSON
+credentials = service_account.Credentials.from_service_account_file(credentials_path)
+
+# Check if model files exist before loading
 if os.path.exists(model_path) and os.path.exists(vectorizer_path) and os.path.exists(label_encoder_path):
     model = joblib.load(model_path)
     vectorizer = joblib.load(vectorizer_path)
@@ -35,10 +49,8 @@ def extract_text_from_docx(uploaded_file):
 
 # Function to send data to Google Sheets
 def send_to_google_sheet(extracted_text, predicted_role):
-    # Set up the credentials and Google Sheets API access
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_api, scope)
-    client = gspread.authorize(creds)
+    # Authorize using Google credentials
+    client = gspread.authorize(credentials)
     
     # Open the Google Sheet (replace with your sheet name or URL)
     sheet = client.open("DataSetStore").sheet1

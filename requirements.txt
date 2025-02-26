@@ -12,3 +12,5 @@ Counter
 requests
 gspread 
 oauth2client
+dotenv
+google

@@ -1,15 +1,20 @@
 import streamlit as st
 import pdfplumber
 import docx2txt
-import pickle
+import joblib  # Use joblib instead of pickle
 import os
 
 # Load the trained model
 script_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "resume_model.pkl"))
+print("Model path:", model_path)
 
-with open(model_path, "rb") as file:
-    model = pickle.load(file)
+# Ensure the file exists before loading
+if os.path.exists(model_path):
+    model = joblib.load(model_path)  # Use joblib.load() instead of pickle.load()
+    print("Model loaded successfully.")
+else:
+    raise FileNotFoundError(f"Model file not found at {model_path}")
 
 # Function to extract text from a PDF
 def extract_text_from_pdf(uploaded_file):
@@ -49,4 +54,3 @@ if uploaded_file is not None:
         # **Display Prediction**
         st.subheader("Predicted Job Role:")
         st.write(f"📌 **{predicted_role}**")
-

@@ -11,7 +11,8 @@ from google.oauth2 import service_account
 # load_dotenv()
 
 # Get credentials from environment variable (the path to the credentials file)
-credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+# credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+credentials_path = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
 
 if credentials_path is None:
     raise ValueError("Google credentials environment variable is not set")

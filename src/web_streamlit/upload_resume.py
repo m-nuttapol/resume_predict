@@ -145,25 +145,20 @@ def page1():
                     # Simulate submitting data
                     send_to_google_sheet(extracted_text, predicted_role)
                     st.success("✅ You chose to submit the predicted role. Thank you!")
-                    thank_you_page()
+                    st.session_state.current_page = "thank_you_page"
 
                 elif consent == "Yes, but I would prefer to provide my own answer":
                     # Simulate submitting data
                     send_to_google_sheet(extracted_text, manual_role)
                     st.success("✅ Your manual role has been submitted. Thank you!")
-                    thank_you_page()
+                    st.session_state.current_page = "thank_you_page"
                 elif consent == "No, thank you":
                     st.success("✅ You chose not to submit the data.")
-                    thank_you_page() 
+                    st.session_state.current_page = "thank_you_page"
 
 
+st.session_state.current_page = "thank_you_page"
 
-
-def thank_you_page():
-    st.title("Thank You :D")
-    st.write("Thank you for your input! Your response has been received.")
-
-# Function for Page 2 (Thank You Page)
 def thank_you_page():
     st.title("Thank You :D")
     st.write("Thank you for your input! Your response has been received.")
@@ -174,9 +169,7 @@ def main():
         st.session_state.current_page = "page_1"  # Default to Page 1
 
     if st.session_state.current_page == "page_1":
-        result = page1()  # Show the Resume Uploader page
-        if result == "thank_you_page":
-            st.session_state.current_page = "thank_you_page"
+        page1()  # Show the Resume Uploader page
 
     elif st.session_state.current_page == "thank_you_page":
         thank_you_page()  # Show the Thank You page

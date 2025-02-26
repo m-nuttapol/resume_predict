@@ -74,11 +74,13 @@ def send_to_google_sheet(extracted_text, predicted_role):
         # row = [predicted_role, extracted_text]
         
         # Get the last row number and add data in the next row
-        last_row = len(sheet.get_all_values()) + 1
+        # last_row = len(sheet.get_all_values()) + 1
         
         # Update predicted_role to column A and extracted_text to column B
-        sheet.update(f"A{last_row}", predicted_role)
-        sheet.update(f"B{last_row}", extracted_text)
+        # sheet.update(f"A{last_row}", predicted_role)
+        # sheet.update(f"B{last_row}", extracted_text)
+        sheet.update('A1', 'Test Data')
+
         
         st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:

@@ -75,7 +75,7 @@ def send_to_google_sheet(extracted_text, predicted_role):
         
         # Get the last row number and add data in the next row
         last_row = len(sheet.get_all_values()) + 1
-        sheet.update(f"A{last_row}:B{last_row}", [row])
+        sheet.update(f"A2:B2", [row])
         
         st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:

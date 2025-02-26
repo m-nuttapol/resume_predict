@@ -4,17 +4,21 @@ import docx2txt
 import joblib  # Use joblib instead of pickle
 import os
 
-# Load the trained model
+# Load the trained model and vectorizer
 script_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "resume_model.pkl"))
-print("Model path:", model_path)
+vectorizer_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "vectorizer.pkl"))
 
-# Ensure the file exists before loading
-if os.path.exists(model_path):
-    model = joblib.load(model_path)  # Use joblib.load() instead of pickle.load()
-    print("Model loaded successfully.")
+print("Model path:", model_path)
+print("Vectorizer path:", vectorizer_path)
+
+# Ensure the files exist before loading
+if os.path.exists(model_path) and os.path.exists(vectorizer_path):
+    model = joblib.load(model_path)  # Load the trained model
+    vectorizer = joblib.load(vectorizer_path)  # Load the saved vectorizer
+    print("✅ Model and vectorizer loaded successfully.")
 else:
-    raise FileNotFoundError(f"Model file not found at {model_path}")
+    raise FileNotFoundError(f"❌ Model or vectorizer file not found at {model_path} or {vectorizer_path}")
 
 # Function to extract text from a PDF
 def extract_text_from_pdf(uploaded_file):
@@ -48,8 +52,11 @@ if uploaded_file is not None:
         st.subheader("Extracted Text:")
         st.text_area("", extracted_text, height=300)
 
+        # **Convert text to numerical features using the TF-IDF vectorizer**
+        extracted_text_vectorized = vectorizer.transform([extracted_text])
+
         # **Make Prediction**
-        predicted_role = model.predict([extracted_text])[0]
+        predicted_role = model.predict(extracted_text_vectorized)[0]
         
         # **Display Prediction**
         st.subheader("Predicted Job Role:")

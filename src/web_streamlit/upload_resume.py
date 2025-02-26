@@ -90,7 +90,9 @@ if st.button("Reset Outputs"):
     st.session_state.uploaded_file = None
     st.session_state.extracted_text = None
     st.session_state.predicted_role = None
-    st.session_state.clear()  # Clear any other session data you don’t need
+    st.session_state.clear()
+    
+    st.empty()
     st.success("All outputs have been cleared!")
 
 

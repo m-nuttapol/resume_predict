@@ -50,11 +50,11 @@ if __name__ == "__main__":
 
 
     #Step 3. transfrom train x train data and x test to tfidf (for train do fit_transform but test just transform )
-    tfidf_proc = Tfidf(x_train,x_test)
+    tfidf_proc = Tfidf(x_train,x_test,script_dir=script_dir)
     tfidt_x_train , tfidf_x_test = tfidf_proc.process()
 
-    tfidf_proc = HandleBalance(tfidt_x_train,y_train)
-    tfidt_x_train , y_train = tfidf_proc.process()
+    handle_proc = HandleBalance(tfidt_x_train,y_train)
+    tfidt_x_train , y_train = handle_proc.process()
     
     
 

@@ -64,29 +64,23 @@ def extract_text_from_docx(uploaded_file):
 def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
     
-    # try:
-    #     sheet = client.open("DataSetStore").sheet1
-    #     row = [predicted_role, extracted_text]
-        
-    #     # Get the last row number and add data in the next row
-    #     last_row = len(sheet.get_all_values()) + 1
-    #     sheet.update(f"A{last_row}:B{last_row}", [row])
-        
-    #     st.success("✅ Data successfully sent to Google Sheet!")
-    # except Exception as e:
-    #     st.error(f"❌ Failed to send data to Google Sheets: {str(e)}")
-
-    
     try:
-        # Open the sheet
-        sheet = client.open("DataSetStore").sheet1
+        # Check if the sheet exists, create if not
+        try:
+            sheet = client.open("DataSetStore").sheet1
+        except gspread.SpreadsheetNotFound:
+            sheet = client.create("DataSetStore").sheet1
         
-        # Update cell A1 with value 1111
-        sheet.update('A1', '1111')
+        row = [predicted_role, extracted_text]
         
-        st.success("✅ Value '1111' successfully set in cell A1!")
+        # Get the last row number and add data in the next row
+        last_row = len(sheet.get_all_values()) + 1
+        sheet.update(f"A{last_row}:B{last_row}", [row])
+        
+        st.success("✅ Data successfully sent to Google Sheet!")
     except Exception as e:
-        st.error(f"❌ Failed to set value in Google Sheets: {str(e)}")
+        st.error(f"❌ Failed to send data to Google Sheets: {str(e)}")
+
 
 # Streamlit UI
 st.title("Resume Uploader and Job Role Predictor")

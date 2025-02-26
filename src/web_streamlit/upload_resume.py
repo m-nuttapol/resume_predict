@@ -5,8 +5,9 @@ import joblib
 import os
 import gspread
 from google.oauth2 import service_account
+import json
 
-# Load the Google credentials from Streamlit secrets
+# Load Google credentials from Streamlit secrets
 google_credentials = st.secrets["GOOGLE_CREDENTIALS"]
 
 # The private key in TOML format will need to be treated as a string
@@ -41,7 +42,7 @@ if os.path.exists(model_path) and os.path.exists(vectorizer_path) and os.path.ex
     model = joblib.load(model_path)  # Load the trained model
     vectorizer = joblib.load(vectorizer_path)  # Load the saved vectorizer
     label_encoder = joblib.load(label_encoder_path)  # Load the label encoder
-    print("✅ Model, vectorizer, and label encoder loaded successfully.")
+    st.write("✅ Model, vectorizer, and label encoder loaded successfully.")
 else:
     raise FileNotFoundError(f"❌ Model, vectorizer, or label encoder file not found.")
 
@@ -63,10 +64,13 @@ def send_to_google_sheet(extracted_text, predicted_role):
     client = gspread.authorize(credentials)
     
     # Open the Google Sheet (replace with your sheet name or URL)
-    sheet = client.open("DataSetStore").sheet1
-    # Insert the extracted text and predicted role into the sheet
-    sheet.append_row([predicted_role, extracted_text])
-    st.success("✅ Data successfully sent to Google Sheet!")
+    try:
+        sheet = client.open("DataSetStore").sheet1
+        # Insert the extracted text and predicted role into the sheet
+        sheet.append_row([predicted_role, extracted_text])
+        st.success("✅ Data successfully sent to Google Sheet!")
+    except Exception as e:
+        st.error(f"❌ Failed to send data to Google Sheets: {e}")
 
 # Streamlit UI
 st.title("Resume Uploader and Job Role Predictor")

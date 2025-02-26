@@ -4,27 +4,29 @@ import docx2txt
 import joblib
 import os
 import gspread
-from dotenv import load_dotenv
 from google.oauth2 import service_account
-import json
+import toml
+
+config = toml.load('config.toml')
 
 # Load environment variables from .env file (ensure .env is present in your project)
-# load_dotenv()
+google_credentials = config['GOOGLE_CREDENTIALS']
 
-# Get credentials from environment variable (the path to the credentials file)
-# credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-# credentials_path = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
+# Create a dictionary for credentials
+credentials_dict = {
+    "type": google_credentials['type'],
+    "project_id": google_credentials['project_id'],
+    "private_key_id": google_credentials['private_key_id'],
+    "private_key": google_credentials['private_key'],
+    "client_email": google_credentials['client_email'],
+    "client_id": google_credentials['client_id'],
+    "auth_uri": google_credentials['auth_uri'],
+    "token_uri": google_credentials['token_uri'],
+    "auth_provider_x509_cert_url": google_credentials['auth_provider_x509_cert_url'],
+    "client_x509_cert_url": google_credentials['client_x509_cert_url'],
+    "universe_domain": google_credentials['universe_domain']
+}
 
-# if credentials_path is None:
-#     raise ValueError("Google credentials environment variable is not set")
-
-# # Load credentials from the service account JSON
-# credentials = service_account.Credentials.from_service_account_file(credentials_path)
-
-
-# Load JSON credentials from Streamlit secrets
-credentials_json = st.secrets["GOOGLE_CREDENTIALS"]
-credentials_dict = json.loads(credentials_json)
 
 # Authenticate with Google using service account info
 credentials = service_account.Credentials.from_service_account_info(credentials_dict)

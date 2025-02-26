@@ -157,7 +157,6 @@ def page1():
                     st.session_state.current_page = "thank_you_page"
 
 
-st.session_state.current_page = "thank_you_page"
 
 def thank_you_page():
     st.title("Thank You :D")

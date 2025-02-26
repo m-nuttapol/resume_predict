@@ -1,8 +1,10 @@
+import joblib
+import os
+
 from sklearn.feature_extraction.text import TfidfVectorizer
-from imblearn.over_sampling import SMOTE
 
 class Tfidf:
-    def __init__(self, x_train, x_test, max_features=1000):
+    def __init__(self, x_train, x_test, script_dir ,max_features=1000 , vectorizer_name="vectorizer.pkl"):
         """
         Initialize the TF-IDF vectorizer and store train/test data.
         """
@@ -11,16 +13,8 @@ class Tfidf:
         self.train = x_train
         self.test = x_test
 
-    def apply_smote(X_train_tfidf, y_train):
-        """Apply SMOTE to handle class imbalance."""
-        smote = SMOTE(sampling_strategy="auto", random_state=42)
-        X_resampled, y_resampled = smote.fit_resample(X_train_tfidf, y_train)
+        self.model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", vectorizer_name))
 
-        print("✅ After SMOTE:")
-        print("X_resampled shape:", X_resampled.shape)
-        print("y_resampled shape:", y_resampled.shape)
-
-        return X_resampled, y_resampled
 
     def process(self):
         """Apply TF-IDF transformation correctly using both text and extracted skills."""
@@ -37,10 +31,12 @@ class Tfidf:
         X_train_tfidf = self.tfidf.fit_transform(self.train["merged_text"])
         X_test_tfidf = self.tfidf.transform(self.test["merged_text"])
 
+        # ✅ Save the vectorizer
+        joblib.dump(self.tfidf, self.model_path)
+        print(f"✅ TF-IDF vectorizer saved at {self.model_path}")
 
         print("✅ After TF-IDF:")
         print("X_train_tfidf shape:", X_train_tfidf.shape)
         print("X_test_tfidf shape:", X_test_tfidf.shape)
 
         return X_train_tfidf, X_test_tfidf
-

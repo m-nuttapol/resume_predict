@@ -163,10 +163,24 @@ def thank_you_page():
     st.title("Thank You :D")
     st.write("Thank you for your input! Your response has been received.")
 
-# Main app logic for page navigation
-# page = st.selectbox("Select a Page", ["Resume Uploader", "Thank You Page"])
+# Function for Page 2 (Thank You Page)
+def thank_you_page():
+    st.title("Thank You :D")
+    st.write("Thank you for your input! Your response has been received.")
 
-# if page == "Resume Uploader":
-#     result = page1()  # Show the Resume Uploader page
-# elif page == "Thank You Page":
-#     thank_you_page()  # S
+# Main app logic for page navigation
+def main():
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = "page_1"  # Default to Page 1
+
+    if st.session_state.current_page == "page_1":
+        result = page1()  # Show the Resume Uploader page
+        if result == "thank_you_page":
+            st.session_state.current_page = "thank_you_page"
+
+    elif st.session_state.current_page == "thank_you_page":
+        thank_you_page()  # Show the Thank You page
+
+# Run the main function
+if __name__ == "__main__":
+    main()

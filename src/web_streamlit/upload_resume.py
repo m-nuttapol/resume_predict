@@ -3,11 +3,14 @@ import pdfplumber
 import docx2txt
 import joblib  # Use joblib instead of pickle
 import os
+import label_encoder
 
 # Load the trained model and vectorizer
 script_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "resume_model.pkl"))
 vectorizer_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "vectorizer.pkl"))
+label_encoder_path = os.path.abspath(os.path.join(script_dir, "../../src/model", "label_encoder.pkl"))
+
 
 print("Model path:", model_path)
 print("Vectorizer path:", vectorizer_path)
@@ -56,8 +59,11 @@ if uploaded_file is not None:
         extracted_text_vectorized = vectorizer.transform([extracted_text])
 
         # **Make Prediction**
-        predicted_role = model.predict(extracted_text_vectorized)[0]
-        
-        # **Display Prediction**
+        predicted_role_encoded = model.predict(extracted_text_vectorized)[0]
+
+        # Convert encoded prediction back to job title
+        predicted_role = label_encoder.inverse_transform([predicted_role_encoded])[0]
+
+        # Display Prediction
         st.subheader("Predicted Job Role:")
         st.write(f"📌 **{predicted_role}**")

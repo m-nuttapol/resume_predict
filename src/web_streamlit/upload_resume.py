@@ -156,23 +156,21 @@ def page1():
                     st.success("✅ You chose not to submit the data.")
                     st.session_state.current_page = "thank_you_page"
 
-                st.experimental_rerun()
 
 
 def thank_you_page():
     st.title("Thank You :D")
     st.write("Thank you for your input! Your response has been received.")
 
-# Main app logic for page navigation
 def main():
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "page_1"  # Default to Page 1
 
     if st.session_state.current_page == "page_1":
-        page1()  # Show the Resume Uploader page
+        page1()  
 
     elif st.session_state.current_page == "thank_you_page":
-        thank_you_page()  # Show the Thank You page
+        thank_you_page()  
 
 # Run the main function
 if __name__ == "__main__":

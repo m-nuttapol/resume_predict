@@ -6,19 +6,28 @@ import os
 import gspread
 from dotenv import load_dotenv
 from google.oauth2 import service_account
+import json
 
 # Load environment variables from .env file (ensure .env is present in your project)
 # load_dotenv()
 
 # Get credentials from environment variable (the path to the credentials file)
 # credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-credentials_path = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
+# credentials_path = st.secrets["GOOGLE_APPLICATION_CREDENTIALS"]
 
-if credentials_path is None:
-    raise ValueError("Google credentials environment variable is not set")
+# if credentials_path is None:
+#     raise ValueError("Google credentials environment variable is not set")
 
-# Load credentials from the service account JSON
-credentials = service_account.Credentials.from_service_account_file(credentials_path)
+# # Load credentials from the service account JSON
+# credentials = service_account.Credentials.from_service_account_file(credentials_path)
+
+
+# Load JSON credentials from Streamlit secrets
+credentials_json = st.secrets["GOOGLE_CREDENTIALS"]
+credentials_dict = json.loads(credentials_json)
+
+# Authenticate with Google using service account info
+credentials = service_account.Credentials.from_service_account_info(credentials_dict)
 
 # Load the trained model, vectorizer, and label encoder
 script_dir = os.path.dirname(os.path.abspath(__file__))

@@ -1,39 +1,46 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
+from imblearn.over_sampling import SMOTE
 
 class Tfidf:
-    def __init__(self, x_train,x_test):
+    def __init__(self, x_train, x_test, max_features=1000):
         """
-        Initialize the TfidfProcessor with max features and stop words.
+        Initialize the TF-IDF vectorizer and store train/test data.
         """
-        self.tfidf = TfidfVectorizer(max_features=1000, stop_words='english')
+        self.tfidf = TfidfVectorizer(max_features=max_features, stop_words='english')
 
         self.train = x_train
         self.test = x_test
 
-        #for trains
-    def fit_transform(self, X_train):
-        """
-        Fit the TF-IDF vectorizer on the training data and transform it.
-        """
-        X_train_tfidf = self.vectorizer.fit_transform(X_train)
-        self.is_fitted = True
-        return X_train_tfidf
+    def apply_smote(X_train_tfidf, y_train):
+        """Apply SMOTE to handle class imbalance."""
+        smote = SMOTE(sampling_strategy="auto", random_state=42)
+        X_resampled, y_resampled = smote.fit_resample(X_train_tfidf, y_train)
 
-        #for test
-    def transform(self, X_test):
-        """
-        Transform new data using the already fitted vectorizer.
-        """
-        if not self.is_fitted:
-            raise ValueError("TfidfProcessor is not fitted yet. Call fit_transform() first.")
-        return self.vectorizer.transform(X_test)
-    
+        print("✅ After SMOTE:")
+        print("X_resampled shape:", X_resampled.shape)
+        print("y_resampled shape:", y_resampled.shape)
+
+        return X_resampled, y_resampled
+
     def process(self):
-        """
-        Get feature names (words) used in the TF-IDF model.
-        """
-        x_train_tfidf =self.tfidf.fit_transform(self.train)
-        x_test_tfidf = self.tfidf.transform(self.test)
+        """Apply TF-IDF transformation correctly using both text and extracted skills."""
 
-        return  x_train_tfidf ,x_test_tfidf
+        # ✅ Ensure required columns exist
+        if "cleaned_text" not in self.train.columns or "extract_skills" not in self.train.columns:
+            raise ValueError("❌ 'cleaned_text' or 'extract_skills' column is missing!")
+
+        # ✅ Merge `cleaned_text` and `extract_skills` into one text column
+        self.train["merged_text"] = self.train["cleaned_text"] + " " + self.train["extract_skills"].apply(lambda skills: " ".join(skills))
+        self.test["merged_text"] = self.test["cleaned_text"] + " " + self.test["extract_skills"].apply(lambda skills: " ".join(skills))
+
+        # ✅ Apply TF-IDF on merged text
+        X_train_tfidf = self.tfidf.fit_transform(self.train["merged_text"])
+        X_test_tfidf = self.tfidf.transform(self.test["merged_text"])
+
+
+        print("✅ After TF-IDF:")
+        print("X_train_tfidf shape:", X_train_tfidf.shape)
+        print("X_test_tfidf shape:", X_test_tfidf.shape)
+
+        return X_train_tfidf, X_test_tfidf
 

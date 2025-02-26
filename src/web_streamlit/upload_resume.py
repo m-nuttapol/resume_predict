@@ -27,7 +27,7 @@ google_credentials_dict = {
 }
 
 # Define the required scopes
-scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+scopes = ["https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive"]
 
 # Authenticate with Google using service account info and correct scopes
 credentials = service_account.Credentials.from_service_account_info(

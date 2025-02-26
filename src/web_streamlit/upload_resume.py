@@ -131,8 +131,9 @@ if uploaded_file is not None:
             # If the user wants to submit the predicted role
             if st.button("Submit to Google Sheet"):
                 send_to_google_sheet(extracted_text, predicted_role)
+                st.success("You chose to submit the data. Thank you!")
 
-            st.success("You chose to submit the data. Thank you!")
+
         
 
         elif consent == "Yes, but I would prefer to provide my own answer":
@@ -141,9 +142,7 @@ if uploaded_file is not None:
             if manual_role:
                 if st.button("Submit Manual Role to Google Sheet"):
                     send_to_google_sheet(extracted_text, manual_role)
-            
-            st.success("You chose to submit the data. Thank you!")
-
+                    st.success("You chose to submit the data. Thank you!")
 
         elif consent == "No, thank you":
             # If the user chooses not to help
